@@ -1,0 +1,31 @@
+{
+    "_comment": "Browser Brain 配置文件。复制为 config.json 后修改。API key 通过环境变量 ANTHROPIC_AUTH_TOKEN 设置。",
+
+    "chrome_port": 9222,
+    "chrome_startup_timeout": 30.0,
+    "chrome_poll_interval": 1.0,
+    "chrome_attach_only": false,
+
+    "capture_max_html_bytes": 500000,
+    "capture_ws_timeout": 5.0,
+    "capture_cache_ttl": 30,
+    "capture_ws_pool_max_idle": 60,
+    "capture_retry_attempts": 3,
+
+    "flask_host": "127.0.0.1",
+    "flask_port": 5577,
+
+    "anthropic_model": "deepseek-v4-flash",
+
+    "outbrain_dir": "",
+    "raw_clippings_subdir": "raw/视频与博客",
+    "wiki_subdir": "wiki",
+    "wiki_summary_subdir": "wiki/摘要",
+
+    "ffmpeg_path": "",
+    "whisper_model_dir": "",
+    "sqlite_db_path": "",
+
+    "log_level": "INFO",
+    "log_file": ""
+}
