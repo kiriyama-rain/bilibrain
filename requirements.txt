@@ -1,0 +1,6 @@
+# BiliBrain — 核心依赖
+flask>=3.0
+openai>=1.0
+beautifulsoup4>=4.12
+markdownify>=0.12
+lxml>=5.0

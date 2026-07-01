@@ -1,0 +1,20 @@
+{
+    "_comment": "BiliBrain 配置示例。复制为 config.json 后修改。API key 通过环境变量 ANTHROPIC_AUTH_TOKEN 设置。",
+
+    "flask_host": "127.0.0.1",
+    "flask_port": 5577,
+
+    "anthropic_base_url": "https://api.deepseek.com",
+    "anthropic_model": "deepseek-v4-flash",
+
+    "outbrain_dir": "",
+    "raw_clippings_subdir": "raw/视频与博客",
+    "wiki_subdir": "wiki",
+    "wiki_summary_subdir": "wiki/摘要",
+
+    "ffmpeg_path": "",
+    "sqlite_db_path": "",
+
+    "log_level": "INFO",
+    "log_file": ""
+}

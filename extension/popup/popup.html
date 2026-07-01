@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BiliBrain</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<div id="app">
+  <!-- 顶栏: 状态 + 操作 -->
+  <header id="topbar">
+    <span class="logo">BiliBrain</span>
+    <div class="top-actions">
+      <span id="status-dot" class="dot offline" title="Flask 后端状态"></span>
+      <button id="btn-refresh" class="icon-btn" title="刷新 (Ctrl+R)">↻</button>
+      <button id="btn-open-full" class="icon-btn" title="打开完整界面">⤢</button>
+    </div>
+  </header>
+
+  <!-- 标签页列表 -->
+  <div id="tab-list" class="tab-list">
+    <div class="loading">加载中...</div>
+  </div>
+
+  <!-- 底部快捷操作 -->
+  <footer id="bottombar">
+    <button id="btn-capture-active" class="btn-primary">捕获当前页</button>
+    <span id="capture-status" class="capture-status"></span>
+  </footer>
+</div>
+<script src="popup.js"></script>
+</body>
+</html>

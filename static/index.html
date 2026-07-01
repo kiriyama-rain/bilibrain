@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BiliBrain</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- 顶部导航 -->
+  <nav id="topbar">
+    <div class="logo">BiliBrain</div>
+    <div class="nav-tabs">
+      <button class="nav-btn active" data-page="tabs">标签页</button>
+      <button class="nav-btn" data-page="capture">捕获</button>
+      <button class="nav-btn" data-page="chat">讨论</button>
+      <button class="nav-btn" data-page="transcribe">转写</button>
+      <button class="nav-btn" data-page="save">保存</button>
+    </div>
+    <button id="theme-toggle" title="切换主题 (Ctrl+T)">☀</button>
+    <div class="status-bar">
+      <span id="server-status" class="status-dot offline" title="Flask 服务状态"></span>
+      <span id="status-text">检查中...</span>
+      <button id="btn-shutdown" class="btn-shutdown" title="关闭 Flask 服务端">⏻</button>
+    </div>
+  </nav>
+
+  <!-- 页面容器 -->
+  <main id="content">
+
+    <!-- 页面1: 标签页列表 -->
+    <section id="page-tabs" class="page active">
+      <div class="page-header">
+        <h2>Chrome 标签页</h2>
+        <button id="refresh-tabs" class="btn-small">刷新 <span class="shortcut-hint">Ctrl+R</span></button>
+      </div>
+      <input id="tab-search" type="text" class="search-input"
+             placeholder="搜索标签页... (Ctrl+K)">
+      <div id="tab-list" class="tab-list">
+        <div class="loading">加载中...</div>
+      </div>
+    </section>
+
+    <!-- 页面2: 捕获内容 -->
+    <section id="page-capture" class="page">
+      <div class="page-header">
+        <h2>捕获内容</h2>
+        <div class="header-actions">
+          <span id="capture-source" class="source-tag"></span>
+          <button id="btn-capture" class="btn-primary">捕获当前标签页 <span class="shortcut-hint">Ctrl+Enter</span></button>
+        </div>
+      </div>
+      <div id="history-bar" class="history-bar" style="display:none">
+        <select id="history-select" class="history-select">
+          <option value="">-- 历史记录 (最近20条) --</option>
+        </select>
+      </div>
+      <div id="capture-result">
+        <div class="empty-state">选择一个标签页，然后点击「捕获」</div>
+      </div>
+      <div id="capture-actions" class="capture-actions" style="display:none">
+        <button id="btn-summary" class="btn-small">AI 摘要</button>
+        <button id="btn-chat-about" class="btn-small">讨论此内容</button>
+        <button id="btn-save-capture" class="btn-small">保存到外脑</button>
+      </div>
+    </section>
+
+    <!-- 页面3: 讨论 -->
+    <section id="page-chat" class="page">
+      <div class="page-header">
+        <h2>讨论</h2>
+        <div class="header-actions">
+          <label class="toggle-label">
+            <input type="checkbox" id="chat-context" checked>
+            <span>携带捕获上下文</span>
+          </label>
+          <button id="btn-clear-chat" class="btn-small">清空</button>
+        </div>
+      </div>
+      <!-- 捕获上下文信息栏 -->
+      <div id="chat-context-bar" class="chat-context-bar" style="display:none">
+        <div class="context-bar-header">
+          <span class="context-bar-icon">&#9432;</span>
+          <span class="context-bar-label">当前上下文:</span>
+          <span class="context-bar-title" id="context-bar-title"></span>
+          <button id="context-bar-toggle" class="btn-tiny" title="展开/收起">▼</button>
+        </div>
+        <div id="context-bar-body" class="context-bar-body">
+          <a id="context-bar-url" class="context-bar-url" href="#" target="_blank"></a>
+          <div id="context-bar-preview" class="context-bar-preview"></div>
+        </div>
+      </div>
+      <div id="chat-messages" class="chat-messages">
+        <div class="empty-state">捕获内容后，来这里讨论</div>
+      </div>
+      <div class="chat-input-area">
+        <div class="quick-btns">
+          <button class="quick-btn" data-q="总结一下这个页面">总结一下</button>
+          <button class="quick-btn" data-q="核心观点是什么">核心观点</button>
+          <button class="quick-btn" data-q="提取关键数据">提取数据</button>
+          <button class="quick-btn" data-q="这篇文章有什么局限性">局限性</button>
+        </div>
+        <div class="input-row">
+          <textarea id="chat-input" placeholder="输入你的问题... (Ctrl+L)" rows="2"></textarea>
+          <button id="btn-send" class="btn-primary">发送</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 页面4: 音频转写 (硬字幕降级) -->
+    <section id="page-transcribe" class="page">
+      <div class="page-header">
+        <h2>音频转文字</h2>
+        <div class="header-actions">
+          <select id="transcribe-history-select" class="history-select" style="display:none;width:280px">
+            <option value="">-- 转写历史 --</option>
+          </select>
+        </div>
+      </div>
+      <div id="transcribe-area" class="transcribe-area">
+        <div class="upload-zone" id="upload-zone">
+          <div class="upload-icon">&#127925;</div>
+          <div class="upload-text">拖拽音频文件到此处，或点击选择</div>
+          <div class="upload-hint">视频→OCR硬字幕 | 音频→语音转文字 | 最大 500MB</div>
+          <input type="file" id="audio-file-input" accept="audio/*,video/*,.m4a,.m4s,.flv,.mp4"
+                 style="display:none">
+        </div>
+        <div id="transcribe-progress" class="transcribe-progress" style="display:none">
+          <div class="progress-track"><div class="progress-fill"></div></div>
+          <div class="progress-text">正在转写... (可能需要 1-5 分钟)</div>
+        </div>
+        <div id="transcribe-result" class="transcribe-result" style="display:none">
+          <div class="result-header">
+            <span>转写结果 (<span id="transcribe-chars">0</span> 字)</span>
+            <button id="btn-use-as-subtitles" class="btn-primary">应用为字幕</button>
+          </div>
+          <textarea id="transcribe-text" rows="10" readonly
+                    placeholder="转写结果将显示在这里..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 页面5: 保存 -->
+    <section id="page-save" class="page">
+      <div class="page-header">
+        <h2>保存到外脑</h2>
+      </div>
+      <div id="save-form" class="save-form">
+        <div class="empty-state">先捕获内容，再来保存</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Toast 通知容器 -->
+<div id="toast-container"></div>
+
+<script src="marked.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
